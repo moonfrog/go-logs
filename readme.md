@@ -1,1 +1,1 @@
-test
+Minimal logging infra using lumberack
