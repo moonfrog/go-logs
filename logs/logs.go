@@ -21,6 +21,7 @@ const (
 	FATAL
 )
 
+// names for metrics
 const (
 	RSTAT_ERROR = "error"
 	RSTAT_WARN  = "warn"
@@ -33,16 +34,19 @@ const (
 
 type Level int
 
-var currentLevel Level
+var currentLevel Level = INFO
 var consoleLoggingEnabled bool = false
-var ConsoleLogger *log.Logger = log.New(os.Stdout, "", log.LstdFlags|log.Lshortfile)
+var consoleLogger *log.Logger = log.New(os.Stdout, "", log.LstdFlags|log.Lshortfile)
 
 var logger *log.Logger = nil
 
+// sets the log file name to appName.log in defaultBaseDir
 func InitDefault(appName string) {
 	Init(appName, DefaultBaseDir)
 }
 
+// sets the log file name to appName.log in base dir
+// takes the current time if appName is empty
 func Init(appName string, baseDir string) {
 	if baseDir == "" {
 		baseDir = DefaultBaseDir
@@ -139,7 +143,7 @@ func Log(level Level, v ...interface{}) {
 			logger.Output(3, output)
 		}
 		if consoleLoggingEnabled {
-			ConsoleLogger.Output(3, output)
+			consoleLogger.Output(3, output)
 		}
 	}
 }
