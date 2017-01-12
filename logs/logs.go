@@ -2,12 +2,14 @@ package logs
 
 import (
 	"fmt"
-	"gopkg.in/natefinch/lumberjack.v2"
 	"log"
 	"os"
 	"path/filepath"
 	"runtime/debug"
 	"time"
+
+	"github.com/moonfrog/go-metrics"
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 const (
@@ -17,6 +19,12 @@ const (
 	ERROR
 	PANIC
 	FATAL
+)
+
+const (
+	RSTAT_ERROR = "error"
+	RSTAT_WARN  = "warn"
+	RSTAT_PANIC = "panic"
 )
 
 const (
@@ -146,16 +154,19 @@ func Infof(v ...interface{}) {
 
 func Warnf(v ...interface{}) {
 	Log(WARN, v...)
+	metrics.Update(RSTAT_WARN, 1)
 }
 
 func Errorf(v ...interface{}) {
 	Log(ERROR, v...)
+	metrics.Update(RSTAT_ERROR, 1)
 }
 
 func Panicf(v ...interface{}) {
 	Log(PANIC, v...)
 	s := fmt.Sprint(v...)
 	panic(s)
+	metrics.Update(RSTAT_PANIC, 1)
 }
 
 func Fatalf(v ...interface{}) {
