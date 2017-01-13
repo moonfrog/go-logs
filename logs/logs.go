@@ -21,13 +21,6 @@ const (
 	FATAL
 )
 
-// names for metrics
-const (
-	RSTAT_ERROR = "error"
-	RSTAT_WARN  = "warn"
-	RSTAT_PANIC = "panic"
-)
-
 const (
 	DefaultBaseDir = "/var/moonfrog/go/"
 )
@@ -158,19 +151,36 @@ func Infof(v ...interface{}) {
 
 func Warnf(v ...interface{}) {
 	Log(WARN, v...)
-	metrics.Update(RSTAT_WARN, 1)
+	metrics.Update(metrics.RSTAT_WARN, 1)
+}
+
+// silent warn
+func SWarnf(v ...interface{}) { // doesn't update metric
+	Log(WARN, v...)
 }
 
 func Errorf(v ...interface{}) {
 	Log(ERROR, v...)
-	metrics.Update(RSTAT_ERROR, 1)
+	metrics.Update(metrics.RSTAT_ERROR, 1)
+}
+
+// silent error
+func SErrorf(v ...interface{}) { // doesn't update metric
+	Log(ERROR, v...)
 }
 
 func Panicf(v ...interface{}) {
 	Log(PANIC, v...)
 	s := fmt.Sprint(v...)
 	panic(s)
-	metrics.Update(RSTAT_PANIC, 1)
+	metrics.Update(metrics.RSTAT_PANIC, 1)
+}
+
+// silent panic
+func SPanicf(v ...interface{}) { // doesn't update metric
+	Log(PANIC, v...)
+	s := fmt.Sprint(v...)
+	panic(s)
 }
 
 func Fatalf(v ...interface{}) {
