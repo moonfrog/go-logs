@@ -189,6 +189,6 @@ func Fatalf(v ...interface{}) {
 	os.Exit(1)
 }
 
-func GetLogger() (*Logger){
+func GetLogger() (*log.Logger){
 	return logger
 }
