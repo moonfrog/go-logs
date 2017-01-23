@@ -188,3 +188,7 @@ func Fatalf(v ...interface{}) {
 	debug.PrintStack()
 	os.Exit(1)
 }
+
+func GetLogger() (*Logger){
+	return logger
+}
